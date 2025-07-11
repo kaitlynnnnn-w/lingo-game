@@ -15,7 +15,9 @@ const gameState = {
 const elements = {
     setupScreen: document.getElementById('setup-screen'),
     modeSelect: document.querySelector('.mode-select'),
-    teamSelect: document.querySelector('.team-select'),
+    teamSelect: document.getElementById('team-select'),
+    normalModeBtn: document.getElementById('normal-mode-btn'),
+    emojiModeBtn: document.getElementById('emoji-mode-btn'),
     nameEntryScreen: document.getElementById('name-entry-screen'),
     teamNameInputs: document.getElementById('team-name-inputs'),
     startGameBtn: document.getElementById('start-game-btn'),
@@ -23,6 +25,32 @@ const elements = {
     normalGameScreen: document.getElementById('normal-game-screen'),
     emojiGameScreen: document.getElementById('emoji-game-screen')
 };
+
+// Initialize Game
+function init() {
+    // Mode selection buttons
+    elements.normalModeBtn.addEventListener('click', () => selectMode('normal'));
+    elements.emojiModeBtn.addEventListener('click', () => selectMode('emoji'));
+    
+    // Team selection buttons
+    document.querySelectorAll('.team-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const numTeams = parseInt(btn.dataset.teams);
+            setupTeamNameEntry(numTeams);
+        });
+    });
+    
+    // Start game button
+    elements.startGameBtn.addEventListener('click', startGame);
+}
+
+function selectMode(mode) {
+    gameState.mode = mode;
+    elements.modeSelect.classList.add('hidden');
+    elements.teamSelect.classList.remove('hidden');
+}
+
+// Rest of your existing functions remain the same
 
 // Word Databases
 const normalWords = [
