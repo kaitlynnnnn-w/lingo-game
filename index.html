@@ -12,18 +12,22 @@
 <body>
     <!-- Setup Screen -->
     <div id="setup-screen" class="screen">
-        <h1>✨ Wongs' family Lingo ✨</h1>
+        <h1>✨ Wordle & Emoji Game ✨</h1>
         <div class="mode-select">
             <h2>Choose Game Mode</h2>
-            <button class="mode-btn" data-mode="normal">Normal Wordle</button>
-            <button class="mode-btn" data-mode="emoji">Emoji Riddles</button>
+            <button id="normal-mode-btn" class="mode-btn" data-mode="normal">Normal Wordle</button>
+            <button id="emoji-mode-btn" class="mode-btn" data-mode="emoji">Emoji Riddles</button>
         </div>
-        <div class="team-select hidden">
+        <div id="team-select" class="team-select hidden">
             <h2>Select Number of Teams</h2>
             <button class="team-btn" data-teams="1">1 Player</button>
             <button class="team-btn" data-teams="2">2 Teams</button>
         </div>
     </div>
+
+    <!-- Rest of your HTML remains the same -->
+</body>
+</html>
 
     <!-- Team Name Entry -->
     <div id="name-entry-screen" class="screen hidden">
