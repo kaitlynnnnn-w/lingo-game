@@ -288,17 +288,29 @@ function setupRiddleMode() {
         </div>
         <div class="timer">60</div>
         <div class="input-area">
-            <input type="text" class="word-input" required>
+            <input type="text" class="word-input" autocomplete="off" required>
             <button class="submit-btn">Submit</button>
         </div>
     `;
 
+    // Clear any existing listeners
+    const newSubmitBtn = document.querySelector('.submit-btn').cloneNode(true);
+    document.querySelector('.submit-btn').replaceWith(newSubmitBtn);
+    
+    // Add fresh listeners
     document.querySelector('.submit-btn').addEventListener('click', processRiddleGuess);
     document.querySelector('.word-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') processRiddleGuess();
     });
 
-    startTimer(60, () => endRiddleRound(false));
+    // Start timer (won't be cleared during team switches)
+    startTimer(60, () => {
+        showTemporaryMessage("Time's up!", "error");
+        endRiddleRound(false);
+    });
+    
+    // Start letter reveal
+    if (gameState.letterInterval) clearInterval(gameState.letterInterval);
     gameState.letterInterval = setInterval(revealNextLetter, 7000);
 }
 
