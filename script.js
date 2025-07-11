@@ -304,16 +304,20 @@ function setupRiddleMode() {
 
 function processRiddleGuess() {
     const input = document.querySelector('.word-input');
-    const guess = input.value.toUpperCase();
-    if (!guess) return;
+    if (!input) return; // Safety check
+    
+    const guess = input.value.trim().toLowerCase();
+    if (!guess) {
+        showTemporaryMessage("Please enter an answer", "error");
+        return;
+    }
 
     gameState.guesses++;
-    const isCorrect = guess === gameState.currentWord;
+    const isCorrect = guess === gameState.currentWord.toLowerCase();
     addGuessFeedback(isCorrect);
 
     if (isCorrect) {
         clearInterval(gameState.letterInterval);
-        clearTimeout(gameState.timer);
         const lettersRevealed = document.querySelector('.letter-reveal').textContent.split('_').length - 1;
         let points = 0;
         
@@ -324,7 +328,7 @@ function processRiddleGuess() {
         
         gameState.scores[gameState.teams[gameState.currentTeamIndex]] += points;
         updateScoreBar();
-        setTimeout(() => endRiddleRound(true), 1500);
+        endRiddleRound(true);
     } else {
         gameState.scores[gameState.teams[gameState.currentTeamIndex]] -= 25;
         updateScoreBar();
