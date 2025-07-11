@@ -452,13 +452,16 @@ function updateScoreBar() {
 
     document.querySelectorAll('.team-score').forEach(teamEl => {
         teamEl.addEventListener('click', () => {
-            if (gameState.currentMode === 'riddle' || gameState.currentMode === 'emoji') {
-                clearTimeout(gameState.timer);
-                if (gameState.letterInterval) clearInterval(gameState.letterInterval);
-            }
+            // Remove timer clearing - timer now continues running
             gameState.currentTeamIndex = parseInt(teamEl.dataset.team);
             updateScoreBar();
-            showTemporaryMessage(`Switched to ${gameState.teams[gameState.currentTeamIndex]}`, "success");
+            showTemporaryMessage(`Now playing: ${gameState.teams[gameState.currentTeamIndex]}`, "success");
+            
+            // Update current team display
+            const teamDisplay = document.querySelector('.current-team');
+            if (teamDisplay) {
+                teamDisplay.textContent = `Team: ${gameState.teams[gameState.currentTeamIndex]}`;
+            }
         });
     });
 }
