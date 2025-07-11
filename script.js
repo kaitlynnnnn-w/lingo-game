@@ -288,44 +288,60 @@ function setupRiddleMode() {
         </div>
         <div class="timer">60</div>
         <div class="input-area">
-            <input type="text" class="word-input" autocomplete="off" required>
-            <button class="submit-btn">Submit</button>
+            <input type="text" class="word-input" id="riddle-input" autocomplete="off" required>
+            <button class="submit-btn" id="riddle-submit">Submit</button>
         </div>
     `;
 
-    // Clear any existing listeners
-    const newSubmitBtn = document.querySelector('.submit-btn').cloneNode(true);
-    document.querySelector('.submit-btn').replaceWith(newSubmitBtn);
-    
-    // Add fresh listeners
-    document.querySelector('.submit-btn').addEventListener('click', processRiddleGuess);
-    document.querySelector('.word-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') processRiddleGuess();
-    });
-
-    // Start timer (won't be cleared during team switches)
+    // Start timer
     startTimer(60, () => {
         showTemporaryMessage("Time's up!", "error");
         endRiddleRound(false);
     });
-    
+
     // Start letter reveal
     if (gameState.letterInterval) clearInterval(gameState.letterInterval);
     gameState.letterInterval = setInterval(revealNextLetter, 7000);
+
+    // Input handling with proper event listeners
+    setupRiddleInput();
+}
+
+function setupRiddleInput() {
+    const input = document.getElementById('riddle-input');
+    const submitBtn = document.getElementById('riddle-submit');
+    
+    if (!input || !submitBtn) return;
+
+    // Remove any existing listeners
+    input.removeEventListener('keydown', handleRiddleKeyDown);
+    submitBtn.removeEventListener('click', processRiddleGuess);
+
+    // Add fresh listeners
+    input.addEventListener('keydown', handleRiddleKeyDown);
+    submitBtn.addEventListener('click', processRiddleGuess);
+    input.focus();
+}
+
+function handleRiddleKeyDown(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        processRiddleGuess();
+    }
 }
 
 function processRiddleGuess() {
-    const input = document.querySelector('.word-input');
-    if (!input) return; // Safety check
-    
-    const guess = input.value.trim().toLowerCase();
+    const input = document.getElementById('riddle-input');
+    if (!input) return;
+
+    const guess = input.value.trim();
     if (!guess) {
         showTemporaryMessage("Please enter an answer", "error");
         return;
     }
 
     gameState.guesses++;
-    const isCorrect = guess === gameState.currentWord.toLowerCase();
+    const isCorrect = guess.toLowerCase() === gameState.currentWord.toLowerCase();
     addGuessFeedback(isCorrect);
 
     if (isCorrect) {
@@ -345,6 +361,7 @@ function processRiddleGuess() {
         gameState.scores[gameState.teams[gameState.currentTeamIndex]] -= 25;
         updateScoreBar();
         input.value = '';
+        input.focus();
     }
 }
 
@@ -464,15 +481,19 @@ function updateScoreBar() {
 
     document.querySelectorAll('.team-score').forEach(teamEl => {
         teamEl.addEventListener('click', () => {
-            // Remove timer clearing - timer now continues running
             gameState.currentTeamIndex = parseInt(teamEl.dataset.team);
             updateScoreBar();
-            showTemporaryMessage(`Now playing: ${gameState.teams[gameState.currentTeamIndex]}`, "success");
             
-            // Update current team display
+            // Update current team display without pausing timer
             const teamDisplay = document.querySelector('.current-team');
             if (teamDisplay) {
                 teamDisplay.textContent = `Team: ${gameState.teams[gameState.currentTeamIndex]}`;
+            }
+            
+            // Re-focus input if in riddle mode
+            if (gameState.currentMode === 'riddle') {
+                const input = document.getElementById('riddle-input');
+                if (input) input.focus();
             }
         });
     });
@@ -531,6 +552,41 @@ function showTemporaryMessage(message, type) {
         msg.classList.add('fade-out');
         setTimeout(() => msg.remove(), 500);
     }, 2000);
+}
+
+// Global variable to track timer state
+let timerRunning = false;
+
+function startTimer(seconds, callback) {
+    // Clear any existing timer
+    clearInterval(gameState.timer);
+    
+    gameState.timeLeft = seconds;
+    const timerElement = document.querySelector('.timer');
+    if (timerElement) timerElement.textContent = seconds;
+    
+    timerRunning = true;
+    
+    gameState.timer = setInterval(() => {
+        if (timerRunning) {
+            gameState.timeLeft--;
+            if (timerElement) timerElement.textContent = gameState.timeLeft;
+            
+            if (gameState.timeLeft <= 0) {
+                clearInterval(gameState.timer);
+                timerRunning = false;
+                callback();
+            }
+        }
+    }, 1000);
+}
+
+function pauseTimer() {
+    timerRunning = false;
+}
+
+function resumeTimer() {
+    timerRunning = true;
 }
 
 function resetGame() {
