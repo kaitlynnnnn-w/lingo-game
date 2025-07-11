@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle-Lingo + Emoji</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="screen">
+        <h1>Wordle-Lingo + Emoji</h1>
+        <div class="team-select">
+            <h2>Select Number of Teams</h2>
+            <button class="team-btn" data-teams="2">2 Teams</button>
+            <button class="team-btn" data-teams="3">3 Teams</button>
+            <button class="team-btn" data-teams="4">4 Teams</button>
+        </div>
+    </div>
+
+    <!-- Team Name Entry -->
+    <div id="name-entry-screen" class="screen hidden">
+        <h1>Enter Team Names</h1>
+        <div id="team-name-inputs"></div>
+        <button id="start-game-btn">Start Game</button>
+    </div>
+
+    <!-- Score Bar -->
+    <div id="score-bar" class="hidden"></div>
+
+    <!-- Game Screens -->
+    <div id="intro-screen" class="screen hidden">
+        <div class="intro-content"></div>
+        <button id="intro-continue-btn" class="continue-btn">Continue</button>
+    </div>
+
+    <div id="normal-game-screen" class="game-screen hidden"></div>
+    <div id="riddle-game-screen" class="game-screen hidden"></div>
+    <div id="emoji-game-screen" class="game-screen hidden"></div>
+
+    <div id="game-over-screen" class="screen hidden">
+        <h1>Game Over!</h1>
+        <div id="final-scores"></div>
+        <button id="play-again-btn">Play Again</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
