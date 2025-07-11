@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cute Wordle Game</title>
+    <title>Cute Wordle & Emoji Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
@@ -12,8 +12,13 @@
 <body>
     <!-- Setup Screen -->
     <div id="setup-screen" class="screen">
-        <h1>✨ Cute Wordle ✨</h1>
-        <div class="team-select">
+        <h1>✨ Wordle & Emoji Game ✨</h1>
+        <div class="mode-select">
+            <h2>Choose Game Mode</h2>
+            <button class="mode-btn" data-mode="normal">Normal Wordle</button>
+            <button class="mode-btn" data-mode="emoji">Emoji Riddles</button>
+        </div>
+        <div class="team-select hidden">
             <h2>Select Number of Teams</h2>
             <button class="team-btn" data-teams="1">1 Player</button>
             <button class="team-btn" data-teams="2">2 Teams</button>
@@ -30,12 +35,22 @@
     <!-- Score Bar -->
     <div id="score-bar" class="hidden"></div>
 
-    <!-- Game Screen -->
-    <div id="game-screen" class="screen hidden">
+    <!-- Normal Game Screen -->
+    <div id="normal-game-screen" class="game-screen hidden">
         <div class="current-team"></div>
         <div class="game-board"></div>
         <div class="input-area">
             <input type="text" class="word-input" maxlength="5" required>
+            <button class="submit-btn">Submit</button>
+        </div>
+    </div>
+
+    <!-- Emoji Game Screen -->
+    <div id="emoji-game-screen" class="game-screen hidden">
+        <div class="current-team"></div>
+        <div class="emoji-display"></div>
+        <div class="input-area">
+            <input type="text" class="word-input" required>
             <button class="submit-btn">Submit</button>
         </div>
     </div>
