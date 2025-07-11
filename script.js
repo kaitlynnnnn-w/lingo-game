@@ -154,22 +154,21 @@ function setupEmojiMode() {
 }
 
 // Input Handlers
-function setupInputHandlers(mode) {
-    const input = document.querySelector('.word-input');
-    const submitBtn = document.querySelector('.submit-btn');
-    
+function setupRiddleInput(mode) {
+    const input = document.getELementById('.word-input');
+    const submitBtn = document.getElementById('.submit-btn');
     // Clear previous listeners
-    const newInput = input.cloneNode(true);
-    const newSubmitBtn = submitBtn.cloneNode(true);
-    input.replaceWith(newInput);
-    submitBtn.replaceWith(newSubmitBtn);
-    
-    // Add new listeners
-    document.querySelector('.submit-btn').addEventListener('click', () => processGuess(mode));
-    document.querySelector('.word-input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') processGuess(mode);
-    });
-    document.querySelector('.word-input').focus();
+input.onkeydown = null;
+submitBtn.onclick = null;
+// Add new listeners
+input.addEventListener ('keydown', function (e) {
+if (e.key === 'Enter') {
+e-preventDefaulto);
+processRiddleGuess ();
+}
+}) ;
+submitBtn.addEventListener('click', processRiddleGuess) ;
+input. focus ();
 }
 
 // Process Guess
@@ -227,6 +226,56 @@ function processGuess(mode) {
     
     input.value = '';
 }
+
+function processRiddleGuess() {
+    const input = document.getElementById('riddle-input');
+    const submitBtn = document.getElementById('riddle-submit');
+    if (!input || !submitBtn) return;
+
+    const guess = input.value.trim().toLowerCase();
+    if (!guess) {
+        showTemporaryMessage("Please enter an answer", "error");
+        return;
+    }
+
+    gameState.guesses++;
+    const isCorrect = guess === gameState.currentWord;
+
+    // Visual feedback
+    input.classList.remove('correct-input', 'wrong-input');
+    void input.offsetWidth; // Trigger reflow
+    input.classList.add(isCorrect ? 'correct-input' : 'wrong-input');
+
+    // Disable input during animation
+    input.disabled = true;
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+        input.classList.remove('correct-input', 'wrong-input');
+        input.disabled = false;
+        submitBtn.disabled = false;
+        
+        if (isCorrect) {
+            const lettersRevealed = document.querySelector('.letter-reveal').textContent.split('_').length - 1;
+            let points = 0;
+            
+            if (lettersRevealed === 0) points = 200;
+            else if (lettersRevealed === 1) points = 150;
+            else if (lettersRevealed === 2) points = 100;
+            else points = 50;
+            
+            gameState.scores[gameState.teams[gameState.currentTeamIndex]] += points;
+            updateScoreBar();
+            endRiddleRound(true);
+        } else {
+            gameState.scores[gameState.teams[gameState.currentTeamIndex]] -= 25;
+            updateScoreBar();
+            input.value = '';
+            input.focus();
+        }
+    }, 1000);
+}
+
 
 // End Round
 function endRound(success) {
