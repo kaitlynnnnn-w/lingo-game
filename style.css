@@ -1,8 +1,8 @@
 /* Cute Polka Dot Background */
 body {
     font-family: 'Comic Neue', cursive;
-    background-color: #fffacd; /* Light yellow */
-    background-image: radial-gradient(#ffb6c1 20%, transparent 20%); /* Light pink dots */
+    background-color: #fffacd;
+    background-image: radial-gradient(#ffb6c1 20%, transparent 20%);
     background-size: 30px 30px;
     margin: 0;
     padding: 0;
@@ -36,6 +36,11 @@ h1 {
     text-shadow: 2px 2px 0px #fff;
 }
 
+h2 {
+    color: #ff8fa3;
+    margin-bottom: 15px;
+}
+
 /* Button Styling */
 button {
     padding: 12px 25px;
@@ -62,7 +67,16 @@ button:active {
     box-shadow: 0 2px 0 #d94e6c;
 }
 
+/* Mode Selection */
+.mode-select, .team-select {
+    margin: 20px 0;
+}
+
 /* Game Board */
+.game-screen {
+    margin-top: 70px;
+}
+
 .game-board {
     margin: 20px 0;
 }
@@ -103,6 +117,13 @@ button:active {
     background-color: #d8d8d8;
     border-color: #d8d8d8;
     color: white;
+}
+
+/* Emoji Display */
+.emoji-display {
+    font-size: 60px;
+    margin: 30px 0;
+    line-height: 1.5;
 }
 
 /* Input Area */
@@ -158,6 +179,10 @@ button:active {
         width: 40px;
         height: 40px;
         font-size: 22px;
+    }
+    
+    .emoji-display {
+        font-size: 40px;
     }
     
     .word-input {
